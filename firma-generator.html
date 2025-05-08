@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+      body, html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <script>
+      window.addEventListener('message', function (event) {
+        if (event.data && event.data.type === 'renderImage') {
+          const htmlContent = event.data.html;
+          const container = document.getElementById('container');
+          container.innerHTML = htmlContent;
+
+          html2canvas(container, { backgroundColor: null }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'firma.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,32 +1,66 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-      body, html {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="container"></div>
-    <script>
-      window.addEventListener('message', function (event) {
-        if (event.data && event.data.type === 'renderImage') {
-          const htmlContent = event.data.html;
-          const container = document.getElementById('container');
-          container.innerHTML = htmlContent;
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+    }
+    #firmaContainer {
+      position: relative;
+      width: 1024px;
+      height: 307px;
+      background-image: url('https://static.wixstatic.com/media/3a006c_1059645e5df748debf7b499dcf1accbc~mv2.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .texto {
+      position: absolute;
+      left: 100px;
+      color: #000;
+    }
+    #nombre { top: 40px; font-size: 22px; font-weight: bold; }
+    #puesto { top: 80px; font-size: 18px; }
+    #telefono { top: 120px; font-size: 16px; }
+    #correo { top: 160px; font-size: 16px; }
+    #descargarBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="firmaContainer">
+    <div id="nombre" class="texto">Nombre Apellido</div>
+    <div id="puesto" class="texto">Puesto</div>
+    <div id="telefono" class="texto">Teléfono</div>
+    <div id="correo" class="texto">Correo</div>
+  </div>
+  <button id="descargarBtn">Descargar Firma</button>
 
-          html2canvas(container, { backgroundColor: null }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = 'firma.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-          });
-        }
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    window.addEventListener("message", function (event) {
+      if (event.data && event.data.nombre) {
+        document.getElementById("nombre").innerText = event.data.nombre;
+        document.getElementById("puesto").innerText = event.data.puesto;
+        document.getElementById("telefono").innerText = event.data.telefono;
+        document.getElementById("correo").innerText = event.data.correo;
+      }
+    });
+
+    document.getElementById('descargarBtn').addEventListener('click', function () {
+      html2canvas(document.getElementById('firmaContainer')).then(function (canvas) {
+        const link = document.createElement('a');
+        link.download = 'firma.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
       });
-    </script>
-  </body>
+    });
+  </script>
+</body>
 </html>

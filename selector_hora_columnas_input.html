@@ -20,22 +20,24 @@
     .hora-display {
       width: 161px;
       height: 36px;
-      background-color: #fff;
+      background-color: #c9c9c9;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 16px;
       margin-bottom: 8px;
       border-radius: 4px;
+      cursor: pointer;
     }
 
     .selector-wrapper {
       display: flex;
-      width: 161px;
+      width: 220px;
       height: 130px;
       background-color: #fff;
       border: 1px solid #ccc;
       overflow: hidden;
+      display: none;
     }
 
     .col {
@@ -55,30 +57,15 @@
       color: #fff;
       font-weight: bold;
     }
-
-    input.time-input {
-      width: 161px;
-      font-size: 16px;
-      padding: 6px;
-      margin-top: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      text-align: center;
-      font-family: 'FlexoRegular', sans-serif;
-    }
   </style>
 </head>
 <body>
 
 <div class="hora-display" id="horaFinal">--:-- --</div>
 
-<div class="selector-wrapper">
-  <div class="col" id="horas">
-    <!-- 01 a 12 -->
-  </div>
-  <div class="col" id="minutos">
-    <!-- 00 a 59 -->
-  </div>
+<div class="selector-wrapper" id="selectorBox">
+  <div class="col" id="horas"></div>
+  <div class="col" id="minutos"></div>
   <div class="col" id="ampm">
     <div>a.m.</div>
     <div>p.m.</div>
@@ -90,7 +77,12 @@
   const minutos = document.getElementById('minutos');
   const ampm = document.getElementById('ampm');
   const horaFinal = document.getElementById('horaFinal');
-  const entradaManual = document.getElementById('entradaManual');
+  const selectorBox = document.getElementById('selectorBox');
+
+  // Toggle al hacer clic en el recuadro gris
+  horaFinal.addEventListener('click', () => {
+    selectorBox.style.display = selectorBox.style.display === 'flex' ? 'none' : 'flex';
+  });
 
   // Generar horas
   for (let i = 1; i <= 12; i++) {
@@ -111,6 +103,7 @@
   function actualizarVista() {
     if (seleccion.hora && seleccion.minuto && seleccion.periodo) {
       horaFinal.textContent = `${seleccion.hora}:${seleccion.minuto} ${seleccion.periodo}`;
+      selectorBox.style.display = 'none'; // Oculta al seleccionar completa
     }
   }
 
@@ -133,19 +126,8 @@
   ampm.addEventListener('click', e => {
     if (e.target.tagName === "DIV") seleccionar("ampm", e.target.textContent);
   });
-
-  entradaManual.addEventListener('input', () => {
-    const raw = entradaManual.value.replace(/[^0-9apm]/gi, '').toLowerCase();
-    if (raw.length >= 6) {
-      const h = raw.substring(0,2);
-      const m = raw.substring(2,4);
-      const p = raw.substring(4).includes("p") ? "p.m." : "a.m.";
-      seleccionar("horas", h);
-      seleccionar("minutos", m);
-      seleccionar("ampm", p);
-    }
-  });
 </script>
 
 </body>
 </html>
+

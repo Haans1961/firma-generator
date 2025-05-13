@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Selector Estilo Columnas</title>
+  <style>
+    @font-face {
+      font-family: 'FlexoRegular';
+      src: url('https://raw.githubusercontent.com/Haans1961/firma-generator/main/Flexo-Regular.ttf') format('truetype');
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      font-family: 'FlexoRegular', sans-serif;
+    }
+
+    .hora-display {
+      width: 161px;
+      height: 36px;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+    }
+
+    .selector-wrapper {
+      display: flex;
+      width: 161px;
+      height: 130px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      overflow: hidden;
+    }
+
+    .col {
+      flex: 1;
+      text-align: center;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+
+    .col div {
+      padding: 4px 0;
+      cursor: pointer;
+    }
+
+    .selected {
+      background-color: #0fa8dc;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    input.time-input {
+      width: 161px;
+      font-size: 16px;
+      padding: 6px;
+      margin-top: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      text-align: center;
+      font-family: 'FlexoRegular', sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+<div class="hora-display" id="horaFinal">--:-- --</div>
+
+<div class="selector-wrapper">
+  <div class="col" id="horas">
+    <!-- 01 a 12 -->
+  </div>
+  <div class="col" id="minutos">
+    <!-- 00 a 59 -->
+  </div>
+  <div class="col" id="ampm">
+    <div>a.m.</div>
+    <div>p.m.</div>
+  </div>
+</div>
+
+<script>
+  const horas = document.getElementById('horas');
+  const minutos = document.getElementById('minutos');
+  const ampm = document.getElementById('ampm');
+  const horaFinal = document.getElementById('horaFinal');
+  const entradaManual = document.getElementById('entradaManual');
+
+  // Generar horas
+  for (let i = 1; i <= 12; i++) {
+    const div = document.createElement('div');
+    div.textContent = i.toString().padStart(2, '0');
+    horas.appendChild(div);
+  }
+
+  // Generar minutos
+  for (let i = 0; i < 60; i++) {
+    const div = document.createElement('div');
+    div.textContent = i.toString().padStart(2, '0');
+    minutos.appendChild(div);
+  }
+
+  let seleccion = { hora: "", minuto: "", periodo: "" };
+
+  function actualizarVista() {
+    if (seleccion.hora && seleccion.minuto && seleccion.periodo) {
+      horaFinal.textContent = `${seleccion.hora}:${seleccion.minuto} ${seleccion.periodo}`;
+    }
+  }
+
+  function seleccionar(col, valor) {
+    document.querySelectorAll(`#${col} div`).forEach(el => el.classList.remove('selected'));
+    const el = [...document.querySelectorAll(`#${col} div`)].find(d => d.textContent === valor);
+    if (el) el.classList.add('selected');
+    seleccion[col === "horas" ? "hora" : col === "minutos" ? "minuto" : "periodo"] = valor;
+    actualizarVista();
+  }
+
+  horas.addEventListener('click', e => {
+    if (e.target.tagName === "DIV") seleccionar("horas", e.target.textContent);
+  });
+
+  minutos.addEventListener('click', e => {
+    if (e.target.tagName === "DIV") seleccionar("minutos", e.target.textContent);
+  });
+
+  ampm.addEventListener('click', e => {
+    if (e.target.tagName === "DIV") seleccionar("ampm", e.target.textContent);
+  });
+
+  entradaManual.addEventListener('input', () => {
+    const raw = entradaManual.value.replace(/[^0-9apm]/gi, '').toLowerCase();
+    if (raw.length >= 6) {
+      const h = raw.substring(0,2);
+      const m = raw.substring(2,4);
+      const p = raw.substring(4).includes("p") ? "p.m." : "a.m.";
+      seleccionar("horas", h);
+      seleccionar("minutos", m);
+      seleccionar("ampm", p);
+    }
+  });
+</script>
+
+</body>
+</html>

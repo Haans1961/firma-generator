@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Contador</title>
+  <style>
+    @font-face {
+      font-family: 'FlexoRegular';
+      src: url('https://raw.githubusercontent.com/Haans1961/firma-generator/main/Flexo-Regular.ttf') format('truetype');
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      font-family: 'FlexoRegular', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .contador {
+      font-size: 15px;
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="contador" id="tiempoTranscurrido">0s</div>
+
+<script>
+  let segundosTotales = 0;
+
+  function actualizarContador() {
+    segundosTotales++;
+
+    const minutos = Math.floor(segundosTotales / 60);
+    const segundos = segundosTotales % 60;
+
+    let texto = '';
+    if (minutos > 0) {
+      texto += `${minutos}m `;
+    }
+    texto += `${segundos}s`;
+
+    document.getElementById('tiempoTranscurrido').textContent = texto;
+  }
+
+  setInterval(actualizarContador, 1000);
+</script>
+
+</body>
+</html>

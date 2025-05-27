@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calendario Estilizado</title>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <style>
+    @font-face {
+      font-family: 'Flexo';
+      src: url('https://raw.githubusercontent.com/Haans1961/firma-generator/main/Flexo-Regular.ttf') format('truetype');
+    }
+
+    body {
+      font-family: 'Flexo', sans-serif;
+      background: #fff;
+      padding: 50px;
+    }
+
+    .calendar-wrapper {
+      position: relative;
+      width: 426px;
+    }
+
+    input[type="text"] {
+      width: 426px;
+      height: 37px;
+      font-size: 20px;
+      padding: 5px 10px;
+      font-family: 'Flexo', sans-serif;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .ui-datepicker {
+      width: 426px !important;
+      height: 265px !important;
+      font-family: 'Flexo', sans-serif;
+      font-size: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      background: #fff;
+    }
+
+    .ui-datepicker-header {
+      border: none;
+      background: none;
+      border-bottom: 1px solid #e74c3c;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .ui-datepicker-title {
+      text-align: center;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .ui-datepicker-prev, .ui-datepicker-next {
+      top: 0;
+      width: auto;
+      height: auto;
+      font-size: 24px;
+      color: #e74c3c;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .ui-datepicker-prev {
+      float: left;
+    }
+
+    .ui-datepicker-next {
+      float: right;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calendar-wrapper">
+    <input type="text" id="datepicker" placeholder="dd/mm/aaaa" />
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+  <script>
+    $(function() {
+      $("#datepicker").datepicker({
+        dateFormat: "dd/mm/yy",
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "2000:2030",
+        showAnim: "fadeIn"
+      });
+
+      // Reemplazar flechas por "<" y ">"
+      setTimeout(() => {
+        $(".ui-datepicker-prev").html("&lt;");
+        $(".ui-datepicker-next").html("&gt;");
+      }, 10);
+
+      // Cada vez que se abre el calendario
+      $("#datepicker").on("focus", function () {
+        setTimeout(() => {
+          $(".ui-datepicker-prev").html("&lt;");
+          $(".ui-datepicker-next").html("&gt;");
+        }, 10);
+      });
+    });
+  </script>
+
+</body>
+</html>
